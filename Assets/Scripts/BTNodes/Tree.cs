@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace BehaviourTree
 {
     public abstract class Tree : MonoBehaviour
     {
         private Node _root = null;
+
+        [SerializeField] protected TMP_Text stateText;
+
+        public Blackboard blackBoard { get; protected set; }
 
         protected void Start()
         {
@@ -15,7 +20,7 @@ namespace BehaviourTree
 
         private void Update()
         {
-            if(_root != null)
+            if (_root != null)
             {
                 _root.Evaluate();
             }

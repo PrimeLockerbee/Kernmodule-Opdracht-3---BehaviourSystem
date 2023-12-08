@@ -15,10 +15,11 @@ public class PatrolTask : Node
     private float _waitCounter = 0f;
     private bool _waiting = false;
 
-    public PatrolTask(Transform transform, Transform[] waypoints)
+    public PatrolTask(Transform transform, Transform[] waypoints, Animator animator)
     {
         _transform = transform;
         _waypoints = waypoints;
+        _animator = animator;
     }
 
     public override NodeStatus Evaluate()
@@ -29,6 +30,7 @@ public class PatrolTask : Node
             if(_waitCounter >= _waitTime)
             {
                 _waiting = false;
+                _animator.SetBool("Walking", true);
             }
         }
         else
@@ -41,10 +43,11 @@ public class PatrolTask : Node
                 _waiting = true;
 
                 _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
+                _animator.SetBool("Walking", false);
             }
             else
             {
-                _transform.position = Vector3.MoveTowards(_transform.position, wp.position, Guard.speed + Time.deltaTime);
+                _transform.position = Vector3.MoveTowards(_transform.position, wp.position, Guard.speed * Time.deltaTime);
                 _transform.LookAt(wp.position);
             }
         }

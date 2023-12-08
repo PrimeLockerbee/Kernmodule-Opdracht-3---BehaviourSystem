@@ -16,7 +16,15 @@ public class Player : MonoBehaviour, IDamageable
     private float hor = 0;
     private Vector3 moveDirection;
     private Collider mainCollider;
-    // Start is called before the first frame update
+
+    //Added myself
+    private int _healthPoints;
+
+    private void Awake()
+    {
+        _healthPoints = 30;
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -59,7 +67,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
-        
+
     }
 
     public void TakeDamage(GameObject attacker, int damage)
@@ -77,7 +85,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             rib.isKinematic = false;
             rib.useGravity = true;
-            rib.AddForce(Vector3.Scale(new Vector3(1,0.5f,1),(transform.position - attacker.transform.position).normalized * deathForce));
+            rib.AddForce(Vector3.Scale(new Vector3(1, 0.5f, 1), (transform.position - attacker.transform.position).normalized * deathForce));
         }
         ragdoll.transform.SetParent(null);
 
@@ -87,13 +95,13 @@ public class Player : MonoBehaviour, IDamageable
     private void GetComponentsRecursively<T>(GameObject obj, ref List<T> components)
     {
         T component = obj.GetComponent<T>();
-        if(component != null)
+        if (component != null)
         {
             components.Add(component);
         }
-        foreach(Transform t in obj.transform)
+        foreach (Transform t in obj.transform)
         {
-            if(t.gameObject == obj) { continue; }
+            if (t.gameObject == obj) { continue; }
             GetComponentsRecursively<T>(t.gameObject, ref components);
         }
     }
@@ -104,5 +112,21 @@ public class Player : MonoBehaviour, IDamageable
         {
             animator.CrossFade(animationName, fadeTime);
         }
+    }
+
+    public bool TakeHit()
+    {
+        _healthPoints -= 10;
+        bool isDead = _healthPoints <= 0;
+        if (isDead)
+        {
+            _Die();
+        }
+        return isDead;
+    }
+
+    private void _Die()
+    {
+        Destroy(gameObject);
     }
 }

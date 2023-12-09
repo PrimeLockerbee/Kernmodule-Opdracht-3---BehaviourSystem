@@ -13,8 +13,9 @@ public class AttackTask : Node
     private float _attackTime = 1f;
     private float _attackCounter = 0f;
 
-    public AttackTask(Transform transform)
+    public AttackTask(Transform transform, Animator animator)
     {
+        _animator = animator;
     }
 
     public override NodeStatus Evaluate()

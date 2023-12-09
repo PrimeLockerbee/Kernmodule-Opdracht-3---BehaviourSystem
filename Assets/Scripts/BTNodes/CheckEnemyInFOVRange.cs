@@ -28,8 +28,6 @@ public class CheckEnemyInFOVRange : Node
             {
                 parent.parent.SetData("target", colliders[0].transform);
                 _animator.SetBool("Walking", true);
-                Debug.Log("Player in FOV. Walking...");
-                Debug.Log("Target set: " + colliders[0].transform);
                 state = NodeStatus.SUCCES;
                 return state;
             }

@@ -15,11 +15,14 @@ public class PickUpWeaponTask : Node
 
     public override NodeStatus Evaluate()
     {
-        object t = GetData("target");
-        if (t == null && !hasPickedUpWeapon)
+        Debug.Log(hasPickedUpWeapon);
+
+        if (!hasPickedUpWeapon)
         {
-            parent.parent.SetData("target", _transform); 
             hasPickedUpWeapon = true;
+
+            Debug.Log(hasPickedUpWeapon);
+
             state = NodeStatus.SUCCES;
             return state;
         }

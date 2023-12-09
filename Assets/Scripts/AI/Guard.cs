@@ -10,6 +10,7 @@ public class Guard : Tree
 
     public static float speed = 2f;
     public static float fovRange = 5f;
+    public static float pickupWeaponRange = 20f;
     public static float attackRange = 1f;
 
     protected override Node SetupTree()
@@ -18,13 +19,15 @@ public class Guard : Tree
         {
             //new Sequence(new List<Node>
             //{
-            //    new CheckEnemyInAttackRange(transform),
-            //    new TaskAttack(transform),
+            //    new CheckEnemyInAttackRange(transform, animator),
+            //    new AttackTask(transform, animator),
             //}),
             new Sequence(new List<Node>
             {
                 new CheckEnemyInFOVRange(transform, animator),
-                new GoToTargetTask(transform),
+                new GoToWeaponTask(transform),
+                new PickUpWeaponTask(),
+                //new GoToTargetTask(transform),
             }),
             new PatrolTask(transform, waypoints, animator),
         });

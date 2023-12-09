@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace BehaviourTree
 {
@@ -21,10 +19,12 @@ namespace BehaviourTree
                         state = NodeStatus.FAILURE;
                         return state;
                     case NodeStatus.SUCCES:
-                        state = NodeStatus.SUCCES;
-                        return state;
+                        continue;
                     case NodeStatus.RUNNING:
-                        state = NodeStatus.RUNNING;
+                        anyChildIsRunning = true;
+                        continue;
+                    default:
+                        state = NodeStatus.SUCCES;
                         return state;
                 }
             }

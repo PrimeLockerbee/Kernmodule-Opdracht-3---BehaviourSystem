@@ -15,19 +15,17 @@ public class Guard : Tree
     protected override Node SetupTree()
     {
         Node root = new Selector(new List<Node>
-        {   
+        {
             //new Sequence(new List<Node>
             //{
-            //    new CheckEnemyInAttackRange(transform, animator),
-            //    new AttackTask(transform),
+            //    new CheckEnemyInAttackRange(transform),
+            //    new TaskAttack(transform),
             //}),
-            //new Sequence(new List<Node>
-            //{
-            //    new CheckEnemyInFOVRange(transform, animator),
-            //    //new GoToWeaponTask(transform),
-            //    //new PickUpWeaponTask(),
-            //    //new GoToTargetTask(transform),
-            //}),
+            new Sequence(new List<Node>
+            {
+                new CheckEnemyInFOVRange(transform, animator),
+                new GoToTargetTask(transform),
+            }),
             new PatrolTask(transform, waypoints, animator),
         });
 

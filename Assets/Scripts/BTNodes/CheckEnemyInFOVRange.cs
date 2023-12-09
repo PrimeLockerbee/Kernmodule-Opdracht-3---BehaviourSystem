@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CheckEnemyInFOVRange : Node
 {
+    private static int _playerLayerMask = 1 << 6;
+
     private Transform _transform;
 
     private Animator _animator;
@@ -20,16 +22,14 @@ public class CheckEnemyInFOVRange : Node
         object t = GetData("target");
         if (t == null)
         {
-            Collider[] colliders = Physics.OverlapSphere(_transform.position, Guard.fovRange);
-
-            //DebugDrawOverlapSphere(_transform.position, Guard.fovRange);
+            Collider[] colliders = Physics.OverlapSphere(_transform.position, Guard.fovRange, _playerLayerMask);
 
             if (colliders.Length > 0)
             {
                 parent.parent.SetData("target", colliders[0].transform);
-
                 _animator.SetBool("Walking", true);
-
+                Debug.Log("Player in FOV. Walking...");
+                Debug.Log("Target set: " + colliders[0].transform);
                 state = NodeStatus.SUCCES;
                 return state;
             }

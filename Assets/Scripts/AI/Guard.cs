@@ -27,7 +27,7 @@ public class Guard : Tree
                 new CheckEnemyInFOVRange(transform, animator),
                 new GoToWeaponTask(transform),
                 new PickUpWeaponTask(),
-                //new GoToTargetTask(transform),
+                new GoToTargetTask(transform),
             }),
             new PatrolTask(transform, waypoints, animator),
         });

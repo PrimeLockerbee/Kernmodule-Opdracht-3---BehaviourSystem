@@ -6,7 +6,6 @@ using BehaviourTree;
 public class GoToWeaponTask : Node
 {
     private static int _weaponLayerMask = 1 << 7;
-
     private Transform _transform;
 
     public GoToWeaponTask(Transform transform)
@@ -24,8 +23,8 @@ public class GoToWeaponTask : Node
         {
             // Look for colliders within the pickup weapon range (trigger colliders)
             Collider[] colliders = Physics.OverlapSphere(_transform.position, Guard.pickupWeaponRange, _weaponLayerMask);
-            DebugDrawOverlapSphere(_transform.position, Guard.pickupWeaponRange);
-            Debug.Log("Number of colliders: " + colliders.Length);
+            //DebugDrawOverlapSphere(_transform.position, Guard.pickupWeaponRange);
+            //Debug.Log("Number of colliders: " + colliders.Length);
 
             if (colliders.Length > 0)
             {
@@ -35,44 +34,32 @@ public class GoToWeaponTask : Node
                     {
                         // Set the weapon as the target
                         parent.parent.SetData("target", collider.transform);
+                        Debug.Log("Weapon found: " + collider.transform.name); // Debug: Target weapon name
 
-                        // Move towards the weapon
-                        float distance = Vector3.Distance(_transform.position, collider.transform.position);
+                        // Calculate the direction to the weapon
+                        Vector3 direction = collider.transform.position - _transform.position;
+                        direction.y = 0;  // We only care about rotation on the Y-axis, so set the Y component to 0
 
-                        if (distance > 0.1f)  // Using a small threshold to stop once we are near enough
+                        // Rotate the guard to face the weapon smoothly
+                        if (direction.magnitude > 0.1f)  // Only rotate if the direction vector is significant
                         {
-                            // Move towards the target (use Vector3.MoveTowards for movement)
-                            _transform.position = Vector3.MoveTowards(_transform.position, collider.transform.position, Guard.speed * Time.deltaTime);
+                            Quaternion targetRotation = Quaternion.LookRotation(direction);
+                            _transform.rotation = Quaternion.Slerp(_transform.rotation, targetRotation, Time.deltaTime * 5f);  // Smooth rotation
 
-                            //// Calculate direction to the weapon (we are only interested in rotation around the Y-axis)
-                            //Vector3 direction = new Vector3(collider.transform.position.x, _transform.position.y, collider.transform.position.z);
+                            // Move the guard towards the weapon
+                            _transform.position = Vector3.MoveTowards(_transform.position, collider.transform.position, Guard.speed * Time.deltaTime);  // Move towards the weapon
 
-                            //// Rotate only on the Y-axis (prevent rotating on X and Z)
-                            //Quaternion targetRotation = Quaternion.LookRotation(direction - _transform.position);
-                            //_transform.rotation = Quaternion.Slerp(_transform.rotation, targetRotation, Time.deltaTime * 5f);  // Smooth rotation
-
-                            state = NodeStatus.RUNNING;  // Task is still running since the guard is moving
-                        }
-                        else
-                        {
-                            // The guard has reached the weapon, pick it up and deactivate the weapon
-                            Debug.Log("Weapon picked up!");
-
-                            // Deactivate the weapon in the scene to simulate pickup
-                            collider.gameObject.SetActive(false);
-
-                            // Transition to success as the task is complete
-                            state = NodeStatus.SUCCES;
+                            Debug.Log("Moving towards: " + collider.transform.name + " at position: " + collider.transform.position); // Debug: Moving towards weapon
                         }
 
-                        // Debug the target information
-                        Debug.Log("Target set to: " + collider.transform.name);
+                        state = NodeStatus.RUNNING;  // Task is still running since the guard is moving towards the weapon
                         return state;
                     }
                 }
             }
 
             // No weapon found in range, so fail the task
+            Debug.Log("No weapon found in range."); // Debug: No weapon found
             state = NodeStatus.FAILURE;
             return state;
         }
@@ -81,12 +68,6 @@ public class GoToWeaponTask : Node
         state = NodeStatus.RUNNING;
         return state;
     }
-
-
-
-
-
-
 
     private void DebugDrawOverlapSphere(Vector3 center, float radius)
     {

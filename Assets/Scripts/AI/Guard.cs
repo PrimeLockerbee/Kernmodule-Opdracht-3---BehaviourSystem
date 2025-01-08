@@ -17,19 +17,23 @@ public class Guard : Tree
     {
         Node root = new Selector(new List<Node>
         {
-            //new Sequence(new List<Node>
-            //{
-            //    new CheckEnemyInAttackRange(transform, animator),
-            //    new AttackTask(transform, animator),
-            //}),
-            //new Sequence(new List<Node>
-            //{
-            //    new CheckEnemyInFOVRange(transform, animator),
-            //    new GoToWeaponTask(transform),
-            //    new PickUpWeaponTask(),
-            //    new GoToTargetTask(transform),
-            //}),
-            new PatrolTask(transform, waypoints, animator),
+            new Sequence(new List<Node>
+            {
+                new CheckEnemyInFOVRange(transform, animator),  // Check if the player is in range
+                new GoToWeaponTask(transform),  // Go pick up the weapon if necessary
+                new PickUpWeaponTask(),  // Pick up the weapon
+                new GoToTargetTask(transform),  // Move towards the player
+                new CheckEnemyInAttackRange(transform, animator),  // Check if the player is in attack range
+                new AttackTask(transform, animator),  // Attack if the player is in range
+            }),
+
+            new Sequence(new List<Node>
+            {
+                new CheckEnemyInFOVRange(transform, animator), // If player is lost or out of range
+                new ReturnToPatrolTask(transform, waypoints[0].position)  // Return to the first waypoint
+            }),
+
+            new PatrolTask(transform, waypoints, animator),  // Default to patrolling when no target is detected
         });
 
         return root;

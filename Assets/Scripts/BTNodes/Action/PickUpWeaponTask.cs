@@ -15,14 +15,9 @@ public class PickUpWeaponTask : Node
 
     public override NodeStatus Evaluate()
     {
-        Debug.Log(hasPickedUpWeapon);
-
         if (!hasPickedUpWeapon)
         {
             hasPickedUpWeapon = true;
-
-            Debug.Log(hasPickedUpWeapon);
-
             state = NodeStatus.SUCCES;
             return state;
         }

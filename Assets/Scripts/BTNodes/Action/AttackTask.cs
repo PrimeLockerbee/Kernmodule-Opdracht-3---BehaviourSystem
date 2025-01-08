@@ -28,10 +28,10 @@ public class AttackTask : Node
         }
 
         _attackCounter += Time.deltaTime;
-        if(_attackCounter >= _attackTime)
+        if (_attackCounter >= _attackTime)
         {
             bool playerIsDead = _Player.TakeHit();
-            if(playerIsDead)
+            if (playerIsDead)
             {
                 ClearData("target");
                 _animator.SetBool("Attacking", false);

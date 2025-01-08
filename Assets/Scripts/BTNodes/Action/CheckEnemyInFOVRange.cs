@@ -20,7 +20,7 @@ public class CheckEnemyInFOVRange : Node
     public override NodeStatus Evaluate()
     {
         object t = GetData("target");
-        if (t == null)
+        if (t == null) 
         {
             Collider[] colliders = Physics.OverlapSphere(_transform.position, Guard.fovRange, _playerLayerMask);
 

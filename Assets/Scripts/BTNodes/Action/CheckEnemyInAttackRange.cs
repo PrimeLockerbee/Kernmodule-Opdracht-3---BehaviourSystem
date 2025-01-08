@@ -30,7 +30,6 @@ public class CheckEnemyInAttackRange : Node
         {
             _animator.SetBool("Attacking", true);
             _animator.SetBool("Walking", false);
-
             state = NodeStatus.SUCCES;
             return state;
         }

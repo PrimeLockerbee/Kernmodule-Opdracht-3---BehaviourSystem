@@ -22,13 +22,13 @@ public class Guard : Tree
             //    new CheckEnemyInAttackRange(transform, animator),
             //    new AttackTask(transform, animator),
             //}),
-            new Sequence(new List<Node>
-            {
-                new CheckEnemyInFOVRange(transform, animator),
-                new GoToWeaponTask(transform),
-                new PickUpWeaponTask(),
-                new GoToTargetTask(transform),
-            }),
+            //new Sequence(new List<Node>
+            //{
+            //    new CheckEnemyInFOVRange(transform, animator),
+            //    new GoToWeaponTask(transform),
+            //    new PickUpWeaponTask(),
+            //    new GoToTargetTask(transform),
+            //}),
             new PatrolTask(transform, waypoints, animator),
         });
 

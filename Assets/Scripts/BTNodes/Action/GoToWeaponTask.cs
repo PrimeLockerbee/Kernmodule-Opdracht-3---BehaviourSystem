@@ -34,7 +34,7 @@ public class GoToWeaponTask : Node
                     {
                         // Set the weapon as the target
                         parent.parent.SetData("target", collider.transform);
-                        Debug.Log("Weapon found: " + collider.transform.name); // Debug: Target weapon name
+                        //Debug.Log("Weapon found: " + collider.transform.name); // Debug: Target weapon name
 
                         // Calculate the direction to the weapon
                         Vector3 direction = collider.transform.position - _transform.position;
@@ -49,7 +49,7 @@ public class GoToWeaponTask : Node
                             // Move the guard towards the weapon
                             _transform.position = Vector3.MoveTowards(_transform.position, collider.transform.position, Guard.speed * Time.deltaTime);  // Move towards the weapon
 
-                            Debug.Log("Moving towards: " + collider.transform.name + " at position: " + collider.transform.position); // Debug: Moving towards weapon
+                            //Debug.Log("Moving towards: " + collider.transform.name + " at position: " + collider.transform.position); // Debug: Moving towards weapon
                         }
 
                         state = NodeStatus.RUNNING;  // Task is still running since the guard is moving towards the weapon
@@ -59,7 +59,7 @@ public class GoToWeaponTask : Node
             }
 
             // No weapon found in range, so fail the task
-            Debug.Log("No weapon found in range."); // Debug: No weapon found
+            //Debug.Log("No weapon found in range."); // Debug: No weapon found
             state = NodeStatus.FAILURE;
             return state;
         }

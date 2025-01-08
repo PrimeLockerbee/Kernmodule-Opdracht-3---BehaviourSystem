@@ -22,7 +22,7 @@ public class Guard : Tree
             {
                 new CheckEnemyInFOVRange(transform, animator),  // Check if the player is in range
                 new GoToWeaponTask(transform),  // Go pick up the weapon if necessary
-                //new PickUpWeaponTask(transform),  // Pick up the weapon
+                new PickUpWeaponTask(transform),  // Pick up the weapon
                 //new GoToTargetTask(transform),  // Move towards the player
                 //new CheckEnemyInAttackRange(transform, animator),  // Check if the player is in attack range
                 //new AttackTask(transform, animator),  // Attack if the player is in range

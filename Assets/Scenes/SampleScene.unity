@@ -665,6 +665,7 @@ MonoBehaviour:
   - {fileID: 1817478150}
   - {fileID: 400465772}
   animator: {fileID: 626784071}
+  hasWeapon: 0
 --- !u!195 &539429223
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1798,7 +1799,7 @@ GameObject:
   - component: {fileID: 1267729048}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

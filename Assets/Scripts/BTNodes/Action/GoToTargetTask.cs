@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviourTree;
+using UnityEngine;
 
 public class GoToTargetTask : Node
 {
@@ -14,20 +12,67 @@ public class GoToTargetTask : Node
 
     public override NodeStatus Evaluate()
     {
+        // Get the Guard component
+        Guard guard = _transform.GetComponent<Guard>();
+        if (guard == null)
+        {
+            Debug.LogWarning("Guard component not found on target.");
+            state = NodeStatus.FAILURE;
+            return state;
+        }
+
+        // Check if the guard has picked up the weapon
+        if (!guard.hasWeapon)
+        {
+            // If the guard hasn't picked up the weapon yet, move to the next node in the tree (fail this task)
+            Debug.Log("Guard hasn't picked up the weapon yet, moving to next task.");
+            state = NodeStatus.FAILURE;  // Fail the task, causing the behavior tree to continue to the next node
+            return state;
+        }
+
+        // Retrieve the target (the player in this case)
         Transform target = (Transform)GetData("target");
 
         if (target != null)
         {
+            // Debugging: Log the target and the guard's position
+            Debug.Log("Guard has the weapon. Moving towards target: " + target.name + " | Distance: " + Vector3.Distance(_transform.position, target.position));
+
             float distance = Vector3.Distance(_transform.position, target.position);
 
-            if (distance > 0.01f)
+            if (distance > 0.1f)  // We want to move until the guard is quite close to the target
             {
+                // Move the guard towards the target
                 _transform.position = Vector3.MoveTowards(_transform.position, target.position, Guard.speed * Time.deltaTime);
-                _transform.LookAt(target.position);
+
+                // Rotate the guard to face the target
+                Vector3 direction = target.position - _transform.position;
+                direction.y = 0;  // Ensure only horizontal rotation (no tilting)
+                if (direction.magnitude > 0.1f)  // Only rotate if there's movement
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    _transform.rotation = Quaternion.Slerp(_transform.rotation, targetRotation, Time.deltaTime * 5f);
+                }
+
+                // Task is still running as the guard is moving
+                state = NodeStatus.RUNNING;
+            }
+            else
+            {
+                // If the guard has reached the target
+                Debug.Log("Guard reached the target: " + target.name);
+
+                // Mark task as success, guard has reached the player
+                state = NodeStatus.SUCCES;
             }
         }
+        else
+        {
+            // If there's no target, fail the task
+            Debug.LogWarning("No target found for the guard to move towards.");
+            state = NodeStatus.FAILURE;
+        }
 
-        state = NodeStatus.RUNNING;
         return state;
     }
 }

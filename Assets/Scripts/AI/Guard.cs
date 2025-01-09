@@ -13,6 +13,8 @@ public class Guard : Tree
     public static float pickupWeaponRange = 20f;
     public static float attackRange = 1f;
 
+    public bool hasWeapon = false;
+
     protected override Node SetupTree()
     {
         Node root = new Selector(new List<Node>

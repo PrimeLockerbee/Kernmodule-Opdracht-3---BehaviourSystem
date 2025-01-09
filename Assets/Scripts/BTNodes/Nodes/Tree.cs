@@ -9,8 +9,6 @@ namespace BehaviourTree
     {
         private Node _root = null;
 
-        [SerializeField] protected TMP_Text stateText;
-
         public Blackboard blackBoard { get; protected set; }
 
         protected void Start()

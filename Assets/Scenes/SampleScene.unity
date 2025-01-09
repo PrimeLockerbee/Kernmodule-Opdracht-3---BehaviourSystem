@@ -666,6 +666,7 @@ MonoBehaviour:
   - {fileID: 400465772}
   animator: {fileID: 626784071}
   hasWeapon: 0
+  player: {fileID: 1267729045}
 --- !u!195 &539429223
 NavMeshAgent:
   m_ObjectHideFlags: 0

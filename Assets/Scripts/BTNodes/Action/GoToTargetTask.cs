@@ -33,6 +33,7 @@ public class GoToTargetTask : Node
         // Retrieve the target (the player in this case)
         Transform target = (Transform)GetData("target");
 
+
         if (target != null)
         {
             // Debugging: Log the target and the guard's position

@@ -8,6 +8,8 @@ public class GoToWeaponTask : Node
     private static int _weaponLayerMask = 1 << 7;
     private Transform _transform;
 
+    private Transform _weapon;
+
     public GoToWeaponTask(Transform transform)
     {
         _transform = transform;
@@ -32,6 +34,8 @@ public class GoToWeaponTask : Node
                 {
                     if (collider.CompareTag("Weapon"))
                     {
+                        _weapon = collider.transform;
+
                         // Set the weapon as the target
                         parent.parent.SetData("target", collider.transform);
                         //Debug.Log("Weapon found: " + collider.transform.name); // Debug: Target weapon name
@@ -50,9 +54,20 @@ public class GoToWeaponTask : Node
                             _transform.position = Vector3.MoveTowards(_transform.position, collider.transform.position, Guard.speed * Time.deltaTime);  // Move towards the weapon
 
                             //Debug.Log("Moving towards: " + collider.transform.name + " at position: " + collider.transform.position); // Debug: Moving towards weapon
+
+                            float distance = Vector3.Distance(_transform.position, _weapon.position);
+                            //Debug.Log("Guard distance to weapon: " + distance);
+
+                            if (distance <= 1f)  // Guard is close enough to pick up the weapon
+                            {
+
+                                // Set the state to success since the task is complete
+                                state = NodeStatus.SUCCES;
+                                return state;
+                            }
                         }
 
-                        state = NodeStatus.RUNNING;  // Task is still running since the guard is moving towards the weapon
+                        state = NodeStatus.RUNNING;
                         return state;
                     }
                 }

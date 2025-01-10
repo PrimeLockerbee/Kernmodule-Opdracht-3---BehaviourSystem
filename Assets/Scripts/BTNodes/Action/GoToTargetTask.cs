@@ -1,5 +1,6 @@
 using BehaviourTree;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class GoToTargetTask : Node
 {
@@ -35,12 +36,23 @@ public class GoToTargetTask : Node
         }
 
 
+
+
         if (_target != null)
         {
             // Debugging: Log the target and the guard's position
             //Debug.Log("Guard has the weapon. Moving towards target: " + _target.name + " | Distance: " + Vector3.Distance(_transform.position, _target.position));
 
             float distance = Vector3.Distance(_transform.position, _target.position);
+
+            // If the player is too far, fail the task to transition to return logic
+            if (distance > 5f)
+            {
+                Debug.Log("Player is too far, stopping chase.");
+                ClearData("target");
+                state = NodeStatus.FAILURE;
+                return state;
+            }
 
             if (distance > 0.2f)  // We want to move until the guard is quite close to the target
             {

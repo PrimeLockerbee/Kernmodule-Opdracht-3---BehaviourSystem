@@ -35,7 +35,7 @@ public class Guard : BehaviourTree.Tree
                 new GoToWeaponTask(transform),  // Go pick up the weapon if necessary
                 new SetStateTextNode("Picking up weapon", _stateText),
                 new PickUpWeaponTask(transform),  // Pick up the weapon
-                new SetStateTextNode("GoToTargetTask", _stateText),
+                new SetStateTextNode("Going to player", _stateText),
                 new GoToTargetTask(transform, _transform),  // Move towards the player
                 new SetStateTextNode("Check if player is in attack range", _stateText),
                 new CheckEnemyInAttackRange(transform, animator, _transform),  // Check if the player is in attack range

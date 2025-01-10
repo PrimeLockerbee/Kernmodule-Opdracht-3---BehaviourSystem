@@ -4,6 +4,7 @@ using UnityEditor;
 using BehaviourTree;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UIElements;
 
 public class Guard : BehaviourTree.Tree
 {
@@ -36,11 +37,10 @@ public class Guard : BehaviourTree.Tree
                 new PickUpWeaponTask(transform),  // Pick up the weapon
                 new SetStateTextNode("GoToTargetTask", _stateText),
                 new GoToTargetTask(transform, _transform),  // Move towards the player
-                new DebugTask("Meep"),
                 new SetStateTextNode("Check if player is in attack range", _stateText),
-                new CheckEnemyInAttackRange(_transform, animator),  // Check if the player is in attack range
+                new CheckEnemyInAttackRange(transform, animator, _transform),  // Check if the player is in attack range
                 new SetStateTextNode("Attacking", _stateText),
-                new AttackTask(_transform, animator),  // Attack if the player is in range
+                new AttackTask(transform, animator, _transform),  // Attack if the player is in range
             }),
 
             new Sequence(new List<Node>

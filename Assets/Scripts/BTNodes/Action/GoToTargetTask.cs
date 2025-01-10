@@ -42,7 +42,7 @@ public class GoToTargetTask : Node
 
             float distance = Vector3.Distance(_transform.position, _target.position);
 
-            if (distance > 0.1f)  // We want to move until the guard is quite close to the target
+            if (distance > 0.2f)  // We want to move until the guard is quite close to the target
             {
                 // Move the guard towards the target
                 _transform.position = Vector3.MoveTowards(_transform.position, _target.position, Guard.speed * Time.deltaTime);

@@ -19,7 +19,6 @@ public class CheckEnemyInAttackRange : Node
     public override NodeStatus Evaluate()
     {
         object t = GetData("target");
-        Debug.Log(t);
 
         if (t == null)
         {

@@ -14,7 +14,7 @@ public class GoToTargetTask : Node
 
     public override NodeStatus Evaluate()
     {
-        Debug.Log("Is running");
+        //Debug.Log("Is running");
 
         // Get the Guard component
         Guard guard = _transform.GetComponent<Guard>();

@@ -17,6 +17,15 @@ public class GoToWeaponTask : Node
 
     public override NodeStatus Evaluate()
     {
+        // Check if the guard already has a weapon
+        Guard guard = _transform.GetComponent<Guard>();
+        if (guard != null && guard.hasWeapon)
+        {
+            // If the guard already has the weapon, succeed immediately
+            state = NodeStatus.SUCCES;
+            return state;
+        }
+
         // Clear existing target data (we're looking for a weapon)
         parent.parent.SetData("target", null);
 
@@ -60,7 +69,6 @@ public class GoToWeaponTask : Node
 
                             if (distance <= 1f)  // Guard is close enough to pick up the weapon
                             {
-
                                 // Set the state to success since the task is complete
                                 state = NodeStatus.SUCCES;
                                 return state;

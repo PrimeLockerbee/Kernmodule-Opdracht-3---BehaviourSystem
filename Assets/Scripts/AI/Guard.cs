@@ -34,24 +34,20 @@ public class Guard : BehaviourTree.Tree
                 new GoToWeaponTask(transform),  // Go pick up the weapon if necessary
                 new SetStateTextNode("Picking up weapon", _stateText),
                 new PickUpWeaponTask(transform),  // Pick up the weapon
-            }),
-
-            new Sequence(new List<Node>
-            {
                 new SetStateTextNode("GoToTargetTask", _stateText),
                 new GoToTargetTask(transform, _transform),  // Move towards the player
                 new SetStateTextNode("Check if player is in attack range", _stateText),
-                new CheckEnemyInAttackRange(transform, animator),  // Check if the player is in attack range
+                new CheckEnemyInAttackRange(_transform, animator),  // Check if the player is in attack range
                 new SetStateTextNode("Attacking", _stateText),
-                new AttackTask(transform, animator),  // Attack if the player is in range
+                new AttackTask(_transform, animator),  // Attack if the player is in range
             }),
 
-            new Sequence(new List<Node>
-            {
-                // Default to patrolling when no target is detected
-                new SetStateTextNode("Patrolling", _stateText),
-                new PatrolTask(transform, waypoints, animator),
-            }),
+            //new Sequence(new List<Node>
+            //{
+            //    // Default to patrolling when no target is detected
+            //    new SetStateTextNode("Patrolling", _stateText),
+            //    new PatrolTask(transform, waypoints, animator),
+            //}),
         });
 
         return root;

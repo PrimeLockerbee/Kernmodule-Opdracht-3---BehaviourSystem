@@ -19,11 +19,15 @@ public class CheckEnemyInAttackRange : Node
     public override NodeStatus Evaluate()
     {
         object t = GetData("target");
-        if(t == null)
+        Debug.Log(t);
+
+        if (t == null)
         {
             state = NodeStatus.FAILURE;
             return state;
         }
+
+
 
         Transform target = (Transform)t;
         if (Vector3.Distance(_transform.position, target.position) <= Guard.attackRange)

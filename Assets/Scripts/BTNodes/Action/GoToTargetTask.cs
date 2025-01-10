@@ -29,7 +29,7 @@ public class GoToTargetTask : Node
         if (!guard.hasWeapon)
         {
             // If the guard hasn't picked up the weapon yet, move to the next node in the tree (fail this task)
-            Debug.Log("Guard hasn't picked up the weapon yet, moving to next task.");
+            //Debug.Log("Guard hasn't picked up the weapon yet, moving to next task.");
             state = NodeStatus.FAILURE;  // Fail the task, causing the behavior tree to continue to the next node
             return state;
         }
@@ -38,7 +38,7 @@ public class GoToTargetTask : Node
         if (_target != null)
         {
             // Debugging: Log the target and the guard's position
-            Debug.Log("Guard has the weapon. Moving towards target: " + _target.name + " | Distance: " + Vector3.Distance(_transform.position, _target.position));
+            //Debug.Log("Guard has the weapon. Moving towards target: " + _target.name + " | Distance: " + Vector3.Distance(_transform.position, _target.position));
 
             float distance = Vector3.Distance(_transform.position, _target.position);
 
@@ -67,6 +67,7 @@ public class GoToTargetTask : Node
 
                 // Mark task as success, guard has reached the player
                 state = NodeStatus.SUCCES;
+                return state;
             }
         }
         else
@@ -74,6 +75,7 @@ public class GoToTargetTask : Node
             // If there's no target, fail the task
             Debug.LogWarning("No target found for the guard to move towards.");
             state = NodeStatus.FAILURE;
+            return state;
         }
 
         state = NodeStatus.RUNNING;

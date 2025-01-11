@@ -46,6 +46,7 @@ public class CheckEnemyInAttackRange : Node
 
         // If the target is out of range, return failure
         _animator.SetBool("Attacking", false);
+        _animator.SetBool("Walking", true);
         state = NodeStatus.FAILURE;
         return state;
     }

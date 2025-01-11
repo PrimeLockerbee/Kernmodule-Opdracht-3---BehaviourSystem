@@ -1,41 +1,42 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
-using UnityEngine.AI;
+using BehaviourTree;
+using UnityEngine;
+using TMPro;
 
-public class Rogue : MonoBehaviour
+public class Rogue : BehaviourTree.Tree
 {
+    public Animator animator;
+    public Transform playerTransform;  // Reference to the player's transform
+    private Player playerScript;  // Reference to the Player script
+    [SerializeField] private Transform _transform;
+    [SerializeField] private TextMeshProUGUI _stateText;
 
-    //private BTBaseNode tree;
-    private NavMeshAgent agent;
-    private Animator animator;
-    private void Awake()
+    public Transform[] coverPoints;
+
+    protected override Node SetupTree()
     {
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
+        Node root = new Selector(new List<Node>
+        {
+            // Sequence for reacting when the player is attacked by an enemy
+            new Sequence(new List<Node>
+            {
+                new SetStateTextNode("Find cover and throw smoke bomb", _stateText),
+                new CheckIfPlayerUnderAttackTask(playerTransform),  // Check if the player is being attacked
+                new FindCoverTask(_transform, coverPoints),  // Find cover to hide behind
+                new ThrowSmokeBombTask(_transform),  // Throw a smoke bomb to confuse the enemy
+            }),
+
+            // Sequence for following the player if nothing else is happening
+            new Sequence(new List<Node>
+            {
+                new SetStateTextNode("Following Player", _stateText),
+                new FollowPlayerTask(_transform, playerTransform, animator),  // Pass the follow range here
+            }),
+
+        });
+
+        return root;
     }
-
-    private void Start()
-    {
-        //TODO: Create your Behaviour tree here
-    }
-
-    private void FixedUpdate()
-    {
-        //tree?.Run();
-    }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.yellow;
-    //    Handles.color = Color.yellow;
-    //    Vector3 endPointLeft = viewTransform.position + (Quaternion.Euler(0, -ViewAngleInDegrees.Value, 0) * viewTransform.transform.forward).normalized * SightRange.Value;
-    //    Vector3 endPointRight = viewTransform.position + (Quaternion.Euler(0, ViewAngleInDegrees.Value, 0) * viewTransform.transform.forward).normalized * SightRange.Value;
-
-    //    Handles.DrawWireArc(viewTransform.position, Vector3.up, Quaternion.Euler(0, -ViewAngleInDegrees.Value, 0) * viewTransform.transform.forward, ViewAngleInDegrees.Value * 2, SightRange.Value);
-    //    Gizmos.DrawLine(viewTransform.position, endPointLeft);
-    //    Gizmos.DrawLine(viewTransform.position, endPointRight);
-
-    //}
 }

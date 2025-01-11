@@ -20,6 +20,8 @@ public class Player : MonoBehaviour, IDamageable
     //Added myself
     private int _healthPoints;
 
+    private bool isUnderAttack = false;
+
     private void Awake()
     {
         _healthPoints = 30;
@@ -72,6 +74,8 @@ public class Player : MonoBehaviour, IDamageable
 
     public void TakeDamage(GameObject attacker, int damage)
     {
+        SetUnderAttack(true);
+
         animator.enabled = false;
         var cols = GetComponentsInChildren<Collider>();
         foreach (Collider col in cols)
@@ -128,5 +132,17 @@ public class Player : MonoBehaviour, IDamageable
     private void _Die()
     {
         Destroy(gameObject);
+    }
+
+    // Method to set the player's under attack state
+    public void SetUnderAttack(bool value)
+    {
+        isUnderAttack = value;
+    }
+
+    // Method to check if the player is under attack
+    public bool IsUnderAttack()
+    {
+        return isUnderAttack;
     }
 }

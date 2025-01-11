@@ -24,7 +24,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        _healthPoints = 30;
+        _healthPoints = 3000;
     }
 
     void Start()
@@ -66,12 +66,7 @@ public class Player : MonoBehaviour, IDamageable
         bool isMoving = hor != 0 || vert != 0;
         ChangeAnimation(isMoving ? "Walk Crouch" : "Crouch Idle", isMoving ? 0.05f : 0.15f);
 
-        Debug.Log(isUnderAttack);
-    }
-
-    private void FixedUpdate()
-    {
-
+        //Debug.Log(isUnderAttack);
     }
 
     public void TakeDamage(GameObject attacker, int damage)
@@ -120,8 +115,6 @@ public class Player : MonoBehaviour, IDamageable
 
     public bool TakeHit()
     {
-        SetUnderAttack(true);
-
         _healthPoints -= 10;
         bool isDead = _healthPoints <= 0;
         if (isDead)
@@ -136,13 +129,11 @@ public class Player : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    // Method to set the player's under attack state
     public void SetUnderAttack(bool value)
     {
         isUnderAttack = value;
     }
 
-    // Method to check if the player is under attack
     public bool IsUnderAttack()
     {
         return isUnderAttack;

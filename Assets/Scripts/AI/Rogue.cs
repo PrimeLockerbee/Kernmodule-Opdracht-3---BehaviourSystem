@@ -10,7 +10,6 @@ public class Rogue : BehaviourTree.Tree
 {
     public Animator animator;
     public Transform playerTransform;  // Reference to the player's transform
-    private Player playerScript;  // Reference to the Player script
     [SerializeField] private Transform _transform;
     [SerializeField] private TextMeshProUGUI _stateText;
     [SerializeField] private NavMeshAgent _agent;
@@ -24,9 +23,11 @@ public class Rogue : BehaviourTree.Tree
             // Sequence for reacting when the player is attacked by an enemy
             new Sequence(new List<Node>
             {
-                new SetStateTextNode("Find cover and throw smoke bomb", _stateText),
+                new SetStateTextNode("Check if player under attack", _stateText),
                 new CheckIfPlayerUnderAttackTask(playerTransform),  // Check if the player is being attacked
+                new SetStateTextNode("Finding cover", _stateText),
                 new FindCoverTask(_agent, coverPoints),  // Find cover to hide behind
+                new SetStateTextNode("Throwing smoke", _stateText),
                 new ThrowSmokeBombTask(_transform),  // Throw a smoke bomb to confuse the enemy
             }),
 

@@ -48,7 +48,7 @@ public class GoToTargetTask : Node
             // If the player is too far, fail the task to transition to return logic
             if (distance > 5f)
             {
-                Debug.Log("Player is too far, stopping chase.");
+                //Debug.Log("Player is too far, stopping chase.");
                 ClearData("target");
                 state = NodeStatus.FAILURE;
                 return state;
@@ -75,7 +75,7 @@ public class GoToTargetTask : Node
             else
             {
                 // If the guard has reached the target
-                Debug.Log("Guard reached the target: " + _target.name);
+                //Debug.Log("Guard reached the target: " + _target.name);
 
                 // Mark task as success, guard has reached the player
                 state = NodeStatus.SUCCES;

@@ -19,6 +19,8 @@ public class FollowPlayerTask : Node
 
     public override NodeStatus Evaluate()
     {
+        Debug.Log("Still following");
+
         if (_playerTransform == null)
         {
             Debug.LogError("Player Transform is null in FollowPlayerTask!");
@@ -48,7 +50,7 @@ public class FollowPlayerTask : Node
             // If within follow range, stop moving
             if (_navMeshAgent.enabled)
             {
-                _navMeshAgent.ResetPath();
+                _navMeshAgent.ResetPath(); // Clear the current path
             }
 
             // Set the Walking boolean to false

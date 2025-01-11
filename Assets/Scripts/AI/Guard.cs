@@ -43,6 +43,7 @@ public class Guard : BehaviourTree.Tree
                 new SetStateTextNode("Check if player is in attack range", _stateText),
                 new CheckEnemyInAttackRange(transform, animator, _transform),  // Check if the player is in attack range
                 new SetStateTextNode("Attacking", _stateText),
+                new SetPlayerUnderAttackTask(_transform.gameObject.GetComponent<Player>(), true),
                 new AttackTask(transform, animator, _transform),  // Attack if the player is in range
             }),
 

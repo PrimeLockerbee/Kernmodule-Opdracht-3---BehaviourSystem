@@ -39,7 +39,7 @@ public class AttackTask : Node
         float distance = Vector3.Distance(_transform.position, _playerTransform.position);
         if (distance > Guard.attackRange)
         {
-            Debug.Log("AttackTask: Player is out of attack range.");
+            //Debug.Log("AttackTask: Player is out of attack range.");
             state = NodeStatus.FAILURE;
             return state;
         }
@@ -54,7 +54,7 @@ public class AttackTask : Node
 
             if (playerIsDead)
             {
-                Debug.Log("AttackTask: Player is dead. Stopping attack.");
+                //Debug.Log("AttackTask: Player is dead. Stopping attack.");
                 _animator.SetBool("Attacking", false);
                 _animator.SetBool("Walking", true);
                 state = NodeStatus.SUCCES;
@@ -62,7 +62,7 @@ public class AttackTask : Node
             }
             else
             {
-                Debug.Log("AttackTask: Player hit but still alive. Resetting attack counter.");
+                //Debug.Log("AttackTask: Player hit but still alive. Resetting attack counter.");
                 _attackCounter = 0f;
             }
         }

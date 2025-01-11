@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Weapon
+  - Guard
+  - Ninja
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - Player
   - Weapon
   - Obstacle
-  - 
+  - Guard
   - 
   - 
   - 

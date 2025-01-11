@@ -35,6 +35,7 @@ public class Rogue : BehaviourTree.Tree
             new Sequence(new List<Node>
             {
                 new SetStateTextNode("Following Player", _stateText),
+                new DebugTask("Works correct"),
                 new FollowPlayerTask(_agent, playerTransform, animator),  // Pass the follow range here
             }),
 

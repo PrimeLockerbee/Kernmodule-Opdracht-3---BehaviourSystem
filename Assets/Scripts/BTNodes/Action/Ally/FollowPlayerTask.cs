@@ -19,7 +19,7 @@ public class FollowPlayerTask : Node
 
     public override NodeStatus Evaluate()
     {
-        Debug.Log("Still following");
+        //Debug.Log("Still following");
 
         if (_playerTransform == null)
         {

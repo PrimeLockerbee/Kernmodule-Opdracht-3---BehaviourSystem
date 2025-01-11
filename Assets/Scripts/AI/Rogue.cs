@@ -4,6 +4,7 @@ using UnityEditor;
 using BehaviourTree;
 using UnityEngine;
 using TMPro;
+using UnityEngine.AI;
 
 public class Rogue : BehaviourTree.Tree
 {
@@ -12,6 +13,7 @@ public class Rogue : BehaviourTree.Tree
     private Player playerScript;  // Reference to the Player script
     [SerializeField] private Transform _transform;
     [SerializeField] private TextMeshProUGUI _stateText;
+    [SerializeField] private NavMeshAgent _agent;
 
     public Transform[] coverPoints;
 
@@ -24,7 +26,7 @@ public class Rogue : BehaviourTree.Tree
             {
                 new SetStateTextNode("Find cover and throw smoke bomb", _stateText),
                 new CheckIfPlayerUnderAttackTask(playerTransform),  // Check if the player is being attacked
-                new FindCoverTask(_transform, coverPoints),  // Find cover to hide behind
+                new FindCoverTask(_agent, coverPoints),  // Find cover to hide behind
                 new ThrowSmokeBombTask(_transform),  // Throw a smoke bomb to confuse the enemy
             }),
 
@@ -32,7 +34,7 @@ public class Rogue : BehaviourTree.Tree
             new Sequence(new List<Node>
             {
                 new SetStateTextNode("Following Player", _stateText),
-                new FollowPlayerTask(_transform, playerTransform, animator),  // Pass the follow range here
+                new FollowPlayerTask(_agent, playerTransform, animator),  // Pass the follow range here
             }),
 
         });

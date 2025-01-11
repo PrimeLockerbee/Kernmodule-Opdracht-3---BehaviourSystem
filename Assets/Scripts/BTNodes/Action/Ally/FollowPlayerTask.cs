@@ -1,58 +1,62 @@
 using BehaviourTree;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FollowPlayerTask : Node
 {
+    private NavMeshAgent _navMeshAgent;
     private Animator _animator;
-    private Transform _transform;
     private Transform _playerTransform;
-    private float _followRange = 2f;  // Distance at which the Ally will stop following
+    private float _followRange = 2f; // Distance at which the Ally will stop following
+    private static readonly int WalkingHash = Animator.StringToHash("Walking"); // Hash for Animator parameter
 
-    public FollowPlayerTask(Transform transform, Transform playerTransform, Animator animator)
+    public FollowPlayerTask(NavMeshAgent navMeshAgent, Transform playerTransform, Animator animator)
     {
-        _transform = transform;
+        _navMeshAgent = navMeshAgent;
         _playerTransform = playerTransform;
         _animator = animator;
     }
 
     public override NodeStatus Evaluate()
     {
-        // Calculate the distance to the player
-        float distance = Vector3.Distance(_transform.position, _playerTransform.position);
-
-        // Determine if the Ally is moving
-        bool isMoving = distance > _followRange;
-
-        // Trigger animations based on movement state
-        if (isMoving)
+        if (_playerTransform == null)
         {
-            // If the Ally is moving, play the "Walk Crouch" animation (or any other animation you want)
-            ChangeAnimation("Walk Crouch", .0001f);
+            Debug.LogError("Player Transform is null in FollowPlayerTask!");
+            state = NodeStatus.FAILURE;
+            return state;
+        }
 
-            // Move the Ally towards the player
-            _transform.position = Vector3.MoveTowards(_transform.position, _playerTransform.position, 2.5f * Time.deltaTime);
+        // Calculate the distance to the player
+        float distance = Vector3.Distance(_navMeshAgent.transform.position, _playerTransform.position);
 
-            // Smoothly rotate the Ally to face the player
-            Vector3 direction = (_playerTransform.position - _transform.position).normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            _transform.rotation = Quaternion.Slerp(_transform.rotation, targetRotation, Time.deltaTime * 5f);
+        if (distance > _followRange)
+        {
+            // Set the destination to follow the player
+            if (_navMeshAgent.enabled)
+            {
+                _navMeshAgent.SetDestination(_playerTransform.position);
+            }
+
+            // Set the Walking boolean to true if the NavMeshAgent is moving
+            bool isWalking = _navMeshAgent.velocity.sqrMagnitude > 0.01f;
+            _animator.SetBool(WalkingHash, isWalking);
 
             state = NodeStatus.RUNNING;
         }
         else
         {
-            // If the Ally is within follow range, stop the walking animation
-            ChangeAnimation("Crouch Idle", 0.15f);
+            // If within follow range, stop moving
+            if (_navMeshAgent.enabled)
+            {
+                _navMeshAgent.ResetPath();
+            }
+
+            // Set the Walking boolean to false
+            _animator.SetBool(WalkingHash, false);
 
             state = NodeStatus.SUCCES;
         }
 
         return state;
-    }
-
-    // Helper method to change animations based on the condition
-    private void ChangeAnimation(string animationName, float speed)
-    {
-        _animator.CrossFade(animationName, speed);
     }
 }

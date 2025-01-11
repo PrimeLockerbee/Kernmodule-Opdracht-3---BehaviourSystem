@@ -5,6 +5,7 @@ using BehaviourTree;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UIElements;
+using UnityEngine.AI;
 
 public class Guard : BehaviourTree.Tree
 {
@@ -21,6 +22,8 @@ public class Guard : BehaviourTree.Tree
     public static float attackRange = 1f;
 
     public bool hasWeapon = false;
+
+    [SerializeField] private NavMeshAgent _agent;
 
     protected override Node SetupTree()
     {
@@ -47,6 +50,7 @@ public class Guard : BehaviourTree.Tree
             {
                 // Default to patrolling when no target is detected
                 new SetStateTextNode("Patrolling", _stateText),
+                new SetPlayerUnderAttackTask(_transform.gameObject.GetComponent<Player>(), false),
                 new PatrolTask(transform, waypoints, animator),
             }),
         });

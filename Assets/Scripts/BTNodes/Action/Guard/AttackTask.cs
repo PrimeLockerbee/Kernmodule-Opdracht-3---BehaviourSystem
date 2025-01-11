@@ -6,7 +6,7 @@ using BehaviourTree;
 public class AttackTask : Node
 {
     private Transform _transform;  // The guard's transform
-    //private Animator _animator;
+    private Animator _animator;
     private Transform _playerTransform; // Reference to the player's transform
     private Player _player;
 
@@ -16,7 +16,7 @@ public class AttackTask : Node
     public AttackTask(Transform transform, Animator animator, Transform playerTransform)
     {
         _transform = transform;         // The guard's transform
-        //_animator = animator;           // Animator for attack animations
+        _animator = animator;           // Animator for attack animations
         _playerTransform = playerTransform; // Direct reference to the player's transform
         _player = playerTransform.GetComponent<Player>();
 
@@ -55,8 +55,8 @@ public class AttackTask : Node
             if (playerIsDead)
             {
                 Debug.Log("AttackTask: Player is dead. Stopping attack.");
-                //_animator.SetBool("Attacking", false);
-                //_animator.SetBool("Walking", true);
+                _animator.SetBool("Attacking", false);
+                _animator.SetBool("Walking", true);
                 state = NodeStatus.SUCCES;
                 return state;
             }

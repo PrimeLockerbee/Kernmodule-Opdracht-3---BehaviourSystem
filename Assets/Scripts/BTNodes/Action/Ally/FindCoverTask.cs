@@ -1,42 +1,79 @@
 using BehaviourTree;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FindCoverTask : Node
 {
+    private NavMeshAgent _navMeshAgent;
     private Transform _transform;
     private Transform[] _coverPoints;
+    private Transform _currentCoverPoint;
 
-    public FindCoverTask(Transform transform, Transform[] coverPoints)
+    public FindCoverTask(NavMeshAgent navMeshAgent, Transform[] coverPoints)
     {
-        _transform = transform;
+        if (navMeshAgent == null)
+        {
+            Debug.LogError("NavMeshAgent is null in FindCoverTask!");
+            throw new System.ArgumentNullException(nameof(navMeshAgent));
+        }
+        if (coverPoints == null || coverPoints.Length == 0)
+        {
+            Debug.LogError("CoverPoints are null or empty in FindCoverTask!");
+            throw new System.ArgumentNullException(nameof(coverPoints));
+        }
+
+        _navMeshAgent = navMeshAgent;
         _coverPoints = coverPoints;
+        _transform = navMeshAgent.transform;
     }
 
     public override NodeStatus Evaluate()
     {
-        // Logic to find the nearest cover point and move to it
-        Transform closestCover = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (var cover in _coverPoints)
+        // If we don't already have a target cover point, find the nearest one
+        if (_currentCoverPoint == null)
         {
-            float distance = Vector3.Distance(_transform.position, cover.position);
-            if (distance < closestDistance)
+            Transform closestCover = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var cover in _coverPoints)
             {
-                closestDistance = distance;
-                closestCover = cover;
+                if (cover == null) continue; // Skip null cover points to avoid errors
+
+                float distance = Vector3.Distance(_transform.position, cover.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestCover = cover;
+                }
+            }
+
+            if (closestCover != null)
+            {
+                _currentCoverPoint = closestCover;
+                _navMeshAgent.SetDestination(_currentCoverPoint.position); // Set the NavMesh destination
+            }
+            else
+            {
+                // No cover points available
+                Debug.LogWarning("No valid cover points found.");
+                state = NodeStatus.FAILURE;
+                return state;
             }
         }
 
-        // Move to the closest cover
-        if (closestCover != null)
+        // Check if the ally has reached the cover point
+        if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
         {
-            _transform.position = Vector3.MoveTowards(_transform.position, closestCover.position, 4f * Time.deltaTime);
-            state = NodeStatus.RUNNING;
-            return state;
+            if (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude == 0f)
+            {
+                Debug.Log("Reached cover!");
+                state = NodeStatus.SUCCES;
+                return state;
+            }
         }
 
-        state = NodeStatus.FAILURE;
+        // Still moving towards the cover point
+        state = NodeStatus.RUNNING;
         return state;
     }
 }

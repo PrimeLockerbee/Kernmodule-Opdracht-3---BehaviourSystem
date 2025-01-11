@@ -31,7 +31,7 @@ public class CheckEnemyInAttackRange : Node
         // Calculate distance between the guard and the target (player)
         float distance = Vector3.Distance(_transform.position, _target.position);
 
-        Debug.Log($"Distance to target: {distance}");
+        //Debug.Log($"Distance to target: {distance}");
 
         // Check if the target is within attack range
         if (distance <= Guard.attackRange)

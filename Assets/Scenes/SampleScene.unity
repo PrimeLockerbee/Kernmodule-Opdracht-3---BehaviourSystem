@@ -730,6 +730,7 @@ MonoBehaviour:
   _transform: {fileID: 1267729045}
   _stateText: {fileID: 828861552}
   hasWeapon: 0
+  _agent: {fileID: 539429223}
 --- !u!195 &539429223
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2224,6 +2225,7 @@ MonoBehaviour:
   moveSpeed: 3
   deathForce: 1500
   ragdoll: {fileID: 1392164572}
+  isUnderAttack: 0
 --- !u!136 &1267729047
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3504,6 +3506,7 @@ MonoBehaviour:
   playerTransform: {fileID: 1267729045}
   _transform: {fileID: 1840160679}
   _stateText: {fileID: 1209218300}
+  _agent: {fileID: 1840160681}
   coverPoints:
   - {fileID: 971557587}
   - {fileID: 1784462007}

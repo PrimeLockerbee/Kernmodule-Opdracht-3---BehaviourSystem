@@ -20,7 +20,7 @@ public class Player : MonoBehaviour, IDamageable
     //Added myself
     private int _healthPoints;
 
-    private bool isUnderAttack = false;
+    [SerializeField] private bool isUnderAttack = false;
 
     private void Awake()
     {
@@ -65,6 +65,8 @@ public class Player : MonoBehaviour, IDamageable
 
         bool isMoving = hor != 0 || vert != 0;
         ChangeAnimation(isMoving ? "Walk Crouch" : "Crouch Idle", isMoving ? 0.05f : 0.15f);
+
+        Debug.Log(isUnderAttack);
     }
 
     private void FixedUpdate()
@@ -74,8 +76,6 @@ public class Player : MonoBehaviour, IDamageable
 
     public void TakeDamage(GameObject attacker, int damage)
     {
-        SetUnderAttack(true);
-
         animator.enabled = false;
         var cols = GetComponentsInChildren<Collider>();
         foreach (Collider col in cols)
@@ -120,6 +120,8 @@ public class Player : MonoBehaviour, IDamageable
 
     public bool TakeHit()
     {
+        SetUnderAttack(true);
+
         _healthPoints -= 10;
         bool isDead = _healthPoints <= 0;
         if (isDead)

@@ -24,6 +24,9 @@ public class PatrolTask : Node
 
     public override NodeStatus Evaluate()
     {
+        _animator.SetBool("Walking", true);
+        _animator.SetBool("Attacking", false);
+
         if (_waiting)
         {
             _waitCounter += Time.deltaTime;
@@ -31,6 +34,7 @@ public class PatrolTask : Node
             {
                 _waiting = false;
                 _animator.SetBool("Walking", true);
+                _animator.SetBool("Attacking", false);
             }
         }
         else
@@ -44,6 +48,7 @@ public class PatrolTask : Node
 
                 _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
                 _animator.SetBool("Walking", false);
+                _animator.SetBool("Attacking", false);
             }
             else
             {

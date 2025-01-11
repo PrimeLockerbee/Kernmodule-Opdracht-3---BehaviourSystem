@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 165667811}
   - component: {fileID: 165667810}
   - component: {fileID: 165667814}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3267,7 +3267,7 @@ GameObject:
   - component: {fileID: 1744050387}
   - component: {fileID: 1744050386}
   - component: {fileID: 1744050390}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3471,7 +3471,7 @@ GameObject:
   - component: {fileID: 1832966959}
   - component: {fileID: 1832966958}
   - component: {fileID: 1832966962}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3686,6 +3686,9 @@ MonoBehaviour:
   _transform: {fileID: 1840160679}
   _stateText: {fileID: 1209218300}
   _agent: {fileID: 1840160681}
+  _obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 256
   coverPoints:
   - {fileID: 971557587}
   - {fileID: 1784462007}

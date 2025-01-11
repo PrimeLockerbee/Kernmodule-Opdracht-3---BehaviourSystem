@@ -3,9 +3,13 @@ using UnityEngine;
 
 public class CheckEnemyInFOVRange : Node
 {
-    private static int _playerLayerMask = 1 << 6;
+    private static int _playerLayerMask = 1 << 6;  // Assuming player is on Layer 6
     private Transform _transform;
     private Animator _animator;
+
+    // Guard's field of view properties
+    private float _fovAngle = 110f;  // Field of view angle (in degrees)
+    private float _fovRange = 20f;   // Field of view range (in units)
 
     public CheckEnemyInFOVRange(Transform transform, Animator animator)
     {
@@ -20,21 +24,37 @@ public class CheckEnemyInFOVRange : Node
         // Only check for a target if we don't have one already
         if (target == null)
         {
-            // Check for player within FOV range
-            Collider[] colliders = Physics.OverlapSphere(_transform.position, Guard.fovRange, _playerLayerMask);
+            Collider[] colliders = Physics.OverlapSphere(_transform.position, _fovRange, _playerLayerMask);
 
-            if (colliders.Length > 0)
+            // Loop through all colliders in range
+            foreach (var collider in colliders)
             {
-                // Player found, set the target to the first detected collider (the player)
-                parent.parent.SetData("target", colliders[0].transform);
-                _animator.SetBool("Walking", true);
-                //Debug.Log("Player detected: " + colliders[0].transform.name);
-                state = NodeStatus.SUCCES;
-                return state;
+                Transform playerTransform = collider.transform;
+
+                // Check if the player is within the guard's field of view
+                Vector3 directionToPlayer = (playerTransform.position - _transform.position).normalized;
+                float angleToPlayer = Vector3.Angle(_transform.forward, directionToPlayer);
+
+                // If the player is within the FOV angle, proceed with line of sight check
+                if (angleToPlayer < _fovAngle / 2f)
+                {
+                    // Now check if the line of sight is clear (no obstructions)
+                    RaycastHit hit;
+                    if (Physics.Raycast(_transform.position + Vector3.up, directionToPlayer, out hit, _fovRange))
+                    {
+                        if (hit.transform == playerTransform)
+                        {
+                            // Player detected within FOV and clear line of sight
+                            parent.parent.SetData("target", playerTransform);
+                            _animator.SetBool("Walking", true);
+                            state = NodeStatus.SUCCES;
+                            return state;
+                        }
+                    }
+                }
             }
 
-            // If no player found, fail the task
-            //Debug.LogWarning("No player in FOV range.");
+            // If no player found within FOV or no clear line of sight, fail the task
             state = NodeStatus.FAILURE;
             return state;
         }
@@ -44,21 +64,16 @@ public class CheckEnemyInFOVRange : Node
         return state;
     }
 
-    private void DebugDrawOverlapSphere(Vector3 center, float radius)
+    private void DebugDrawFOV(Vector3 center, float range, float angle)
     {
-        int numPoints = 30;
-        float angleIncrement = 360f / numPoints;
+        float halfAngle = angle / 2f;
+        Vector3 leftBoundary = Quaternion.Euler(0, -halfAngle, 0) * _transform.forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, halfAngle, 0) * _transform.forward;
 
-        for (int i = 0; i < numPoints; i++)
-        {
-            float angle = i * angleIncrement;
-            float x = center.x + radius * Mathf.Cos(Mathf.Deg2Rad * angle);
-            float z = center.z + radius * Mathf.Sin(Mathf.Deg2Rad * angle);
+        Debug.DrawRay(center, leftBoundary * range, Color.green);  // Left edge of the FOV
+        Debug.DrawRay(center, rightBoundary * range, Color.green); // Right edge of the FOV
 
-            Vector3 startPoint = new Vector3(x, center.y, z);
-            Vector3 endPoint = center;
-
-            Debug.DrawLine(startPoint, endPoint, Color.red, 0.1f);
-        }
+        // Optional: Draw a line indicating the center of the FOV
+        Debug.DrawRay(center, _transform.forward * range, Color.red);
     }
 }

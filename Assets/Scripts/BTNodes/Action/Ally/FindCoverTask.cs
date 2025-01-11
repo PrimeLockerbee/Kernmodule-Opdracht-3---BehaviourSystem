@@ -1,27 +1,17 @@
 using BehaviourTree;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class FindCoverTask : Node
 {
-  private NavMeshAgent _navMeshAgent;
+    private NavMeshAgent _navMeshAgent;
     private Transform _transform;
     private Transform[] _coverPoints;
     private Transform _currentCoverPoint;
 
     public FindCoverTask(NavMeshAgent navMeshAgent, Transform[] coverPoints)
     {
-        if (navMeshAgent == null)
-        {
-            Debug.LogError("NavMeshAgent is null in FindCoverTask!");
-            throw new System.ArgumentNullException(nameof(navMeshAgent));
-        }
-        if (coverPoints == null || coverPoints.Length == 0)
-        {
-            Debug.LogError("CoverPoints are null or empty in FindCoverTask!");
-            throw new System.ArgumentNullException(nameof(coverPoints));
-        }
-
         _navMeshAgent = navMeshAgent;
         _coverPoints = coverPoints;
         _transform = navMeshAgent.transform;
@@ -51,7 +41,8 @@ public class FindCoverTask : Node
             {
                 _currentCoverPoint = closestCover;
 
-                // Set the NavMesh destination and log for debugging
+                // Reset path to clear any previous destinations (like player)
+                _navMeshAgent.ResetPath();
                 _navMeshAgent.SetDestination(_currentCoverPoint.position);
 
                 // Debug the destination name
@@ -66,12 +57,6 @@ public class FindCoverTask : Node
             }
         }
 
-        // Debug to check if the destination is still the player
-        if (_navMeshAgent.destination == _transform.position)
-        {
-            Debug.LogWarning("NavMeshAgent destination is set to the player!");
-        }
-
         // Check if the ally has reached the cover point
         if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance + 0.2f) // Adjust buffer here
         {
@@ -83,9 +68,6 @@ public class FindCoverTask : Node
                 return state;
             }
         }
-
-        // Debug the current destination and remaining distance
-        //Debug.Log($"Moving towards cover: {_navMeshAgent.destination}, Remaining Distance: {_navMeshAgent.remainingDistance}, Cover Object: {_currentCoverPoint?.name}");
 
         // Still moving towards the cover point
         state = NodeStatus.RUNNING;

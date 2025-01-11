@@ -33,11 +33,9 @@ public class FollowPlayerTask : Node
 
         if (distance > _followRange)
         {
-            // Set the destination to follow the player
-            if (_navMeshAgent.enabled)
-            {
-                _navMeshAgent.SetDestination(_playerTransform.position);
-            }
+            // Reset path before setting a new destination to avoid stale destinations
+            _navMeshAgent.ResetPath();
+            _navMeshAgent.SetDestination(_playerTransform.position);
 
             // Set the Walking boolean to true if the NavMeshAgent is moving
             bool isWalking = _navMeshAgent.velocity.sqrMagnitude > 0.01f;
@@ -48,10 +46,7 @@ public class FollowPlayerTask : Node
         else
         {
             // If within follow range, stop moving
-            if (_navMeshAgent.enabled)
-            {
-                _navMeshAgent.ResetPath(); // Clear the current path
-            }
+            _navMeshAgent.ResetPath(); // Clear the current path
 
             // Set the Walking boolean to false
             _animator.SetBool(WalkingHash, false);

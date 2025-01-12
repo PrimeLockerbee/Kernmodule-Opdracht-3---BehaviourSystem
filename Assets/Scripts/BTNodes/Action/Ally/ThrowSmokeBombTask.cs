@@ -9,16 +9,19 @@ public class ThrowSmokeBombTask : Node
     private bool _isThrown = false;
 
     private GameObject _invisSmokeWall;
+    private GameObject _smokeObject;
 
     private MonoBehaviour _monoBehaviour;
 
-    public ThrowSmokeBombTask(Transform transform, GameObject gameobject, MonoBehaviour monoBehaviour)
+    public ThrowSmokeBombTask(Transform transform, GameObject gameobject, MonoBehaviour monoBehaviour, GameObject smokeObject)
     {
         _transform = transform;
 
         _invisSmokeWall = gameobject;
 
         _monoBehaviour = monoBehaviour;
+
+        _smokeObject = smokeObject;
     }
 
     public override NodeStatus Evaluate()
@@ -37,13 +40,13 @@ public class ThrowSmokeBombTask : Node
             {
                 if (guardCollider.TryGetComponent<Guard>(out var guard))
                 {
-                    // Temporarily disable the guard's behavior (confuse them)
-                    //guard.Confuse(5f);  // Guard will be confused for 5 seconds
 
                     _monoBehaviour.StartCoroutine(InvisWallTimer());
 
-                    // Optionally, trigger a smoke effect (create a prefab)
-                    //Instantiate(smokePrefab, guard.transform.position, Quaternion.identity);
+                    GameObject smokeInstance = GameObject.Instantiate(_smokeObject, guard.transform.position, Quaternion.identity);
+
+                    // Destroy the smoke effect after 2 seconds
+                    GameObject.Destroy(smokeInstance, 4f);
 
                     // Log to verify the effect
                     Debug.Log($"Guard {guard.name} is confused for 5 seconds.");

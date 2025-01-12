@@ -3689,6 +3689,8 @@ MonoBehaviour:
   _stateText: {fileID: 1209218300}
   _agent: {fileID: 1840160681}
   _invisWall: {fileID: 2002248098}
+  _smokeEffect: {fileID: 6514080569050760840, guid: fc3e9f8907782234881d276b1605aa58,
+    type: 3}
   coverPoints:
   - {fileID: 971557587}
   - {fileID: 1784462007}

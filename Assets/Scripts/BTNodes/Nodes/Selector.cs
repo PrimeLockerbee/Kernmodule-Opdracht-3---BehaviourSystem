@@ -9,19 +9,19 @@ namespace BehaviourTree
         public Selector() : base() { }
         public Selector(List<Node> children) : base(children) { }
 
-        private int childIndex;
+        private int _childIndex;
 
         public override NodeStatus Evaluate()
         {
-            for (int i = childIndex; i < children.Count; i++)
+            for (int i = _childIndex; i < _children.Count; i++)
             {
-                Node child = children[i];
+                Node child = _children[i];
                 switch (child.Evaluate())
                 {         
                         case NodeStatus.FAILURE:
                             continue;
                         case NodeStatus.SUCCES:
-                            childIndex = 0;
+                        _childIndex = 0;
                             state = NodeStatus.SUCCES;
                             return state;
                         case NodeStatus.RUNNING:
@@ -32,7 +32,7 @@ namespace BehaviourTree
                 }     
             }
 
-            childIndex = 0;
+            _childIndex = 0;
             state = NodeStatus.FAILURE;
             return state;
         }

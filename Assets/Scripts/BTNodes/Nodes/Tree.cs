@@ -9,8 +9,6 @@ namespace BehaviourTree
     {
         private Node _root = null;
 
-        public Blackboard blackBoard { get; protected set; }
-
         protected void Start()
         {
             _root = SetupTree();

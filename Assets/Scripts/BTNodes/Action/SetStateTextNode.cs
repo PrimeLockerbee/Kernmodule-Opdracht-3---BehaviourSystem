@@ -7,7 +7,6 @@ public class SetStateTextNode : Node
     private string _message;
     private TextMeshProUGUI _textMeshProUGUI;
 
-    // Constructor that takes a message to log
     public SetStateTextNode(string message, TextMeshProUGUI statetext)
     {
         _message = message;
@@ -16,9 +15,10 @@ public class SetStateTextNode : Node
 
     public override NodeStatus Evaluate()
     {
-        //Debug.Log(_message);  // Log the message to the console
+        //Debug.Log(_message);  //Log the message to the console
+
         _textMeshProUGUI.text = _message;
-        state = NodeStatus.SUCCES;  // Immediately succeed after logging the message
+        state = NodeStatus.SUCCES;
         return state;
     }
 }

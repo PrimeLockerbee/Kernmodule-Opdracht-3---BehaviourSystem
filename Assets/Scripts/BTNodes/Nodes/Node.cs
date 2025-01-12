@@ -14,14 +14,14 @@ namespace BehaviourTree
     {
         protected NodeStatus state;
 
-        public Node parent;
-        protected List<Node> children = new List<Node>();
+        public Node _parent;
+        protected List<Node> _children = new List<Node>();
 
         private Dictionary<string, object> _dataContext = new Dictionary<string, object>();
 
         public Node()
         {
-            parent = null;
+            _parent = null;
         }
 
         public Node(List<Node> children)
@@ -34,8 +34,8 @@ namespace BehaviourTree
 
         private void _Attach(Node node)
         {
-            node.parent = this;
-            children.Add(node);
+            node._parent = this;
+            _children.Add(node);
         }
 
         public virtual NodeStatus Evaluate() => NodeStatus.FAILURE;
@@ -53,7 +53,7 @@ namespace BehaviourTree
                 return value;
             }
 
-            Node node = parent;
+            Node node = _parent;
             while (node != null)
             {
                 value = node.GetData(key);
@@ -61,7 +61,7 @@ namespace BehaviourTree
                 {
                     return value;
                 }
-                node = node.parent;
+                node = node._parent;
             }
             return null;
         }
@@ -74,7 +74,7 @@ namespace BehaviourTree
                 return true;
             }
 
-            Node node = parent;
+            Node node = _parent;
             while (node != null)
             {
                 bool cleared = node.ClearData(key);
@@ -82,7 +82,7 @@ namespace BehaviourTree
                 {
                     return true;
                 }
-                node = node.parent;
+                node = node._parent;
             }
             return false;
         }

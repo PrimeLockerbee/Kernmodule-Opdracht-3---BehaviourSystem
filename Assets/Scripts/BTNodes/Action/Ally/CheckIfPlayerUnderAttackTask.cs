@@ -12,11 +12,9 @@ public class CheckIfPlayerUnderAttackTask : Node
 
     public override NodeStatus Evaluate()
     {
-
         Player player = _playerTransform.GetComponent<Player>();
         if (player != null && player.IsUnderAttack()) 
         {
-
             state = NodeStatus.SUCCES;
             return state;
         }

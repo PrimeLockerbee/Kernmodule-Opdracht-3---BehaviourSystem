@@ -5,9 +5,9 @@ using BehaviourTree;
 
 public class AttackTask : Node
 {
-    private Transform _transform;  // The guard's transform
+    private Transform _guardTransform;
     private Animator _animator;
-    private Transform _playerTransform; // Reference to the player's transform
+    private Transform _playerTransform;
     private Player _player;
 
     private float _attackTime = 1f;
@@ -15,9 +15,9 @@ public class AttackTask : Node
 
     public AttackTask(Transform transform, Animator animator, Transform playerTransform)
     {
-        _transform = transform;         // The guard's transform
-        _animator = animator;           // Animator for attack animations
-        _playerTransform = playerTransform; // Direct reference to the player's transform
+        _guardTransform = transform;
+        _animator = animator;
+        _playerTransform = playerTransform;
         _player = playerTransform.GetComponent<Player>();
 
         if (_player == null)
@@ -35,44 +35,27 @@ public class AttackTask : Node
             return state;
         }
 
-        // Calculate distance to the player
-        float distance = Vector3.Distance(_transform.position, _playerTransform.position);
-        if (distance > Guard.attackRange)
+        float distance = Vector3.Distance(_guardTransform.position, _playerTransform.position);
+        if (distance > Guard._attackRange)
         {
             //Debug.Log("AttackTask: Player is out of attack range.");
             state = NodeStatus.FAILURE;
             return state;
         }
 
-        // Increment attack timer
         _attackCounter += Time.deltaTime;
         if (_attackCounter >= _attackTime)
         {
-            // Perform the attack
             //Debug.Log($"AttackTask: Attacking player at {_playerTransform.position}.");
+
             bool playerIsDead = _player.TakeHit();
             _animator.SetBool("Attacking", false);
             _animator.SetBool("Walking", true);
             _attackCounter = 0f;
             state = NodeStatus.SUCCES;
             return state;
-
-            //if (playerIsDead)
-            //{
-            //    //Debug.Log("AttackTask: Player is dead. Stopping attack.");
-            //    _animator.SetBool("Attacking", false);
-            //    _animator.SetBool("Walking", true);
-            //    state = NodeStatus.SUCCES;
-            //    return state;
-            //}
-            //else
-            //{
-            //    //Debug.Log("AttackTask: Player hit but still alive. Resetting attack counter.");
-            //    _attackCounter = 0f;
-            //}
         }
 
-        // Continue attacking
         state = NodeStatus.RUNNING;
         return state;
     }

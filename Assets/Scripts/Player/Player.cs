@@ -24,7 +24,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        _healthPoints = 3000;
+        _healthPoints = 30;
     }
 
     void Start()
@@ -126,7 +126,31 @@ public class Player : MonoBehaviour, IDamageable
 
     private void _Die()
     {
-        Destroy(gameObject);
+        var camera = Camera.GetComponent<ThirdPersonCamera>();
+        if (camera != null)
+        {
+            camera.StopFollowing();
+        }
+
+        animator.enabled = false;
+        this.enabled = false;
+
+        var cols = GetComponentsInChildren<Collider>();
+        foreach (Collider col in cols)
+        {
+            col.enabled = true;
+        }
+        mainCollider.enabled = false;
+
+        var rigidBodies = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rib in rigidBodies)
+        {
+            rib.isKinematic = false;
+            rib.useGravity = true;
+            rib.AddForce(Vector3.Scale(new Vector3(1, 0.5f, 1), (transform.position - Camera.position).normalized * deathForce));
+        }
+
+        ragdoll.transform.SetParent(null);
     }
 
     public void SetUnderAttack(bool value)

@@ -7,19 +7,19 @@ namespace BehaviourTree
         public Sequence() : base() { }
         public Sequence(List<Node> children) : base(children) { }
 
-        private int childIndex;
+        private int _childIndex;
 
         public override NodeStatus Evaluate()
         {
             bool anyChildIsRunning = false;
 
-            for (int i = childIndex; i < children.Count; i++)
+            for (int i = _childIndex; i < _children.Count; i++)
             {
-                Node child = children[i];
+                Node child = _children[i];
                 switch (child.Evaluate())
                 {
                     case NodeStatus.FAILURE:
-                        childIndex = 0;
+                        _childIndex = 0;
                         state = NodeStatus.FAILURE;
                         return state;
                     case NodeStatus.SUCCES:
@@ -33,7 +33,7 @@ namespace BehaviourTree
                 }
             }
 
-            childIndex = 0;
+            _childIndex = 0;
             state = anyChildIsRunning ? NodeStatus.RUNNING : NodeStatus.SUCCES;
             return state;
         }

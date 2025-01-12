@@ -778,6 +778,7 @@ MonoBehaviour:
   _stateText: {fileID: 828861552}
   hasWeapon: 0
   _agent: {fileID: 539429223}
+  _invisWall: {fileID: 2002248098}
 --- !u!195 &539429223
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -816,6 +817,7 @@ Transform:
   - {fileID: 925384070}
   - {fileID: 626784070}
   - {fileID: 573446901}
+  - {fileID: 2002248099}
   m_Father: {fileID: 1469501571}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &539429225
@@ -3686,6 +3688,7 @@ MonoBehaviour:
   _transform: {fileID: 1840160679}
   _stateText: {fileID: 1209218300}
   _agent: {fileID: 1840160681}
+  _invisWall: {fileID: 2002248098}
   coverPoints:
   - {fileID: 971557587}
   - {fileID: 1784462007}
@@ -3821,6 +3824,59 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!1 &2002248098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2002248099}
+  - component: {fileID: 2002248100}
+  m_Layer: 0
+  m_Name: InvisWall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2002248099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002248098}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 539429224}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2002248100
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002248098}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2.5565298, z: 1.1056949}
+  m_Center: {x: 0, y: 0.7782649, z: 0.23934565}
 --- !u!1 &2037139097
 GameObject:
   m_ObjectHideFlags: 0

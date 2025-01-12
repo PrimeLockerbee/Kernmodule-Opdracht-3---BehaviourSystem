@@ -14,6 +14,8 @@ public class Rogue : BehaviourTree.Tree
     [SerializeField] private TextMeshProUGUI _stateText;
     [SerializeField] private NavMeshAgent _agent;
 
+    [SerializeField] private GameObject _invisWall;
+
     public Transform[] coverPoints;
 
     protected override Node SetupTree()
@@ -28,7 +30,8 @@ public class Rogue : BehaviourTree.Tree
                 new SetStateTextNode("Finding cover", _stateText),
                 new FindCoverTask(_agent, coverPoints),  // Find cover to hide behind
                 new SetStateTextNode("Throwing smoke", _stateText),
-                new ThrowSmokeBombTask(_transform),  // Throw a smoke bomb to confuse the enemy
+                new ThrowSmokeBombTask(_transform, _invisWall, this),  // Throw a smoke bomb to confuse the enemy
+                //new SetPlayerUnderAttackTask(_transform.gameObject.GetComponent<Player>(), false),
             }),
 
             // Sequence for following the player if nothing else is happening

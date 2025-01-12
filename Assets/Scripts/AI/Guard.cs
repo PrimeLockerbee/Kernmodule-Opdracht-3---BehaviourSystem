@@ -19,11 +19,13 @@ public class Guard : BehaviourTree.Tree
     public static float speed = 2f;
     public static float fovRange = 5f;
     public static float pickupWeaponRange = 20f;
-    public static float attackRange = 1f;
+    public static float attackRange = 2f;
 
     public bool hasWeapon = false;
 
     [SerializeField] private NavMeshAgent _agent;
+
+    [SerializeField] private GameObject _invisWall;
 
     protected override Node SetupTree()
     {
@@ -33,7 +35,7 @@ public class Guard : BehaviourTree.Tree
             new Sequence(new List<Node>
             {
                 new SetStateTextNode("Check player in range", _stateText),
-                new CheckEnemyInFOVRange(transform, animator),  // Check if the player is in range
+                new CheckEnemyInFOVRange(transform, animator, _invisWall),  // Check if the player is in range
                 new SetStateTextNode("Going to weapon", _stateText),
                 new GoToWeaponTask(transform),  // Go pick up the weapon if necessary
                 new SetStateTextNode("Picking up weapon", _stateText),
@@ -57,5 +59,10 @@ public class Guard : BehaviourTree.Tree
         });
 
         return root;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position + Vector3.up, _transform.position);
     }
 }

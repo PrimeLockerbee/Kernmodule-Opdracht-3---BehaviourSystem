@@ -51,20 +51,25 @@ public class AttackTask : Node
             // Perform the attack
             //Debug.Log($"AttackTask: Attacking player at {_playerTransform.position}.");
             bool playerIsDead = _player.TakeHit();
+            _animator.SetBool("Attacking", false);
+            _animator.SetBool("Walking", true);
+            _attackCounter = 0f;
+            state = NodeStatus.SUCCES;
+            return state;
 
-            if (playerIsDead)
-            {
-                //Debug.Log("AttackTask: Player is dead. Stopping attack.");
-                _animator.SetBool("Attacking", false);
-                _animator.SetBool("Walking", true);
-                state = NodeStatus.SUCCES;
-                return state;
-            }
-            else
-            {
-                //Debug.Log("AttackTask: Player hit but still alive. Resetting attack counter.");
-                _attackCounter = 0f;
-            }
+            //if (playerIsDead)
+            //{
+            //    //Debug.Log("AttackTask: Player is dead. Stopping attack.");
+            //    _animator.SetBool("Attacking", false);
+            //    _animator.SetBool("Walking", true);
+            //    state = NodeStatus.SUCCES;
+            //    return state;
+            //}
+            //else
+            //{
+            //    //Debug.Log("AttackTask: Player hit but still alive. Resetting attack counter.");
+            //    _attackCounter = 0f;
+            //}
         }
 
         // Continue attacking

@@ -35,9 +35,6 @@ public class GoToTargetTask : Node
             return state;
         }
 
-
-
-
         if (_target != null)
         {
             // Debugging: Log the target and the guard's position
@@ -54,7 +51,7 @@ public class GoToTargetTask : Node
                 return state;
             }
 
-            if (distance > 0.2f)  // We want to move until the guard is quite close to the target
+            if (distance > Guard.attackRange)  // We want to move until the guard is quite close to the target
             {
                 // Move the guard towards the target
                 _transform.position = Vector3.MoveTowards(_transform.position, _target.position, Guard.speed * Time.deltaTime);

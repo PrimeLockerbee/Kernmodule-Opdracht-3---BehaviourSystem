@@ -1,4 +1,5 @@
 using BehaviourTree;
+using System.Collections;
 using UnityEngine;
 
 public class ThrowSmokeBombTask : Node
@@ -7,9 +8,17 @@ public class ThrowSmokeBombTask : Node
     private float _throwRadius = 500f; // Radius within which to affect the guard
     private bool _isThrown = false;
 
-    public ThrowSmokeBombTask(Transform transform)
+    private GameObject _invisSmokeWall;
+
+    private MonoBehaviour _monoBehaviour;
+
+    public ThrowSmokeBombTask(Transform transform, GameObject gameobject, MonoBehaviour monoBehaviour)
     {
         _transform = transform;
+
+        _invisSmokeWall = gameobject;
+
+        _monoBehaviour = monoBehaviour;
     }
 
     public override NodeStatus Evaluate()
@@ -31,6 +40,8 @@ public class ThrowSmokeBombTask : Node
                     // Temporarily disable the guard's behavior (confuse them)
                     //guard.Confuse(5f);  // Guard will be confused for 5 seconds
 
+                    _monoBehaviour.StartCoroutine(InvisWallTimer());
+
                     // Optionally, trigger a smoke effect (create a prefab)
                     //Instantiate(smokePrefab, guard.transform.position, Quaternion.identity);
 
@@ -45,6 +56,7 @@ public class ThrowSmokeBombTask : Node
         else
         {
             // Once the smoke bomb is thrown, return to following the player
+            _isThrown= false;
             state = NodeStatus.SUCCES;  // This signals that the task has finished successfully
         }
 
@@ -56,5 +68,14 @@ public class ThrowSmokeBombTask : Node
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(_transform.position, _throwRadius);
+    }
+
+    IEnumerator InvisWallTimer()
+    {
+        _invisSmokeWall.SetActive(true);
+
+        yield return new WaitForSeconds(5);
+
+        _invisSmokeWall.SetActive(false);
     }
 }

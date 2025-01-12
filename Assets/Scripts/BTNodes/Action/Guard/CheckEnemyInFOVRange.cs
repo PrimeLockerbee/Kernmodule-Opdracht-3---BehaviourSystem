@@ -11,14 +11,23 @@ public class CheckEnemyInFOVRange : Node
     private float _fovAngle = 110f;  // Field of view angle (in degrees)
     private float _fovRange = 20f;   // Field of view range (in units)
 
-    public CheckEnemyInFOVRange(Transform transform, Animator animator)
+    [SerializeField] private GameObject _invisWall;
+
+    public CheckEnemyInFOVRange(Transform transform, Animator animator, GameObject invisWall)
     {
         _transform = transform;
         _animator = animator;
+        _invisWall = invisWall;
     }
 
     public override NodeStatus Evaluate()
     {
+        if (_invisWall.activeInHierarchy)
+        {
+            state = NodeStatus.FAILURE;
+            return state;
+        }
+
         object target = GetData("target");
 
         // Only check for a target if we don't have one already
@@ -35,9 +44,13 @@ public class CheckEnemyInFOVRange : Node
                 Vector3 directionToPlayer = (playerTransform.position - _transform.position).normalized;
                 float angleToPlayer = Vector3.Angle(_transform.forward, directionToPlayer);
 
+                //Debug.DrawRay(_transform.position + Vector3.up, directionToPlayer, Color.red);
+
                 // If the player is within the FOV angle, proceed with line of sight check
                 if (angleToPlayer < _fovAngle / 2f)
                 {
+                    Physics.queriesHitTriggers = true;
+
                     // Now check if the line of sight is clear (no obstructions)
                     RaycastHit hit;
                     if (Physics.Raycast(_transform.position + Vector3.up, directionToPlayer, out hit, _fovRange))

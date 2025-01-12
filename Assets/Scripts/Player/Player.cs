@@ -49,7 +49,6 @@ public class Player : MonoBehaviour, IDamageable
         rb.isKinematic = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         vert = Input.GetAxis("Vertical");
@@ -65,8 +64,6 @@ public class Player : MonoBehaviour, IDamageable
 
         bool isMoving = hor != 0 || vert != 0;
         ChangeAnimation(isMoving ? "Walk Crouch" : "Crouch Idle", isMoving ? 0.05f : 0.15f);
-
-        //Debug.Log(isUnderAttack);
     }
 
     public void TakeDamage(GameObject attacker, int damage)
